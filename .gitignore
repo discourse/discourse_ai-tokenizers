@@ -9,7 +9,5 @@
 /.claude/
 /.ruby-lsp/
 
-
-
-# rspec failure tracking
+*.gem
 .rspec_status

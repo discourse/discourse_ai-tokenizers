@@ -10,15 +10,15 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Unified tokenizer interface for AI/ML models supporting OpenAI, Anthropic, Gemini, Llama, and embedding models"
   spec.description = "A Ruby gem providing a consistent interface for various AI/ML tokenizers including OpenAI GPT, Anthropic Claude, Google Gemini, Meta Llama, Mistral, Qwen, and embedding models like BERT, BGE, and multilingual-E5. Features caching, truncation, token counting, and error handling across different tokenization libraries."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage = "https://github.com/discourse/discourse_ai-tokenizers"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["changelog_uri"] = "https://github.com/discourse/discourse_ai-tokenizers/blob/main/CHANGELOG.md"
 
   gemspec = File.basename(__FILE__)
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|

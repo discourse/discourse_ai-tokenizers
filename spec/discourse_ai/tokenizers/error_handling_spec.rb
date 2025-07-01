@@ -122,8 +122,8 @@ RSpec.describe DiscourseAi::Tokenizers do
           tokenizer_class.below_limit?(sample_text, 5, strict: true)
         result_non_strict =
           tokenizer_class.below_limit?(sample_text, 5, strict: false)
-        expect(result_strict).to be_in([true, false])
-        expect(result_non_strict).to be_in([true, false])
+        expect(result_strict).to be(true).or be(false)
+        expect(result_non_strict).to be(true).or be(false)
       end
     end
 

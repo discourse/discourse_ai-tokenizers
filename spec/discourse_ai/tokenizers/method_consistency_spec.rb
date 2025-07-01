@@ -135,7 +135,7 @@ RSpec.describe DiscourseAi::Tokenizers do
 
       it "has custom below_limit? implementation" do
         result = described_class.below_limit?(test_text, 100)
-        expect(result).to be_in([true, false])
+        expect(result).to be(true).or be(false)
       end
 
       it "handles unicode errors in truncate" do

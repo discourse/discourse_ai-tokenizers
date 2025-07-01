@@ -44,9 +44,9 @@ RSpec.describe DiscourseAi::Tokenizers do
         expect(tokenizer_class.encode(sample_text)).to be_an(Array)
         expect(tokenizer_class.decode([1, 2, 3])).to be_a(String)
         expect(tokenizer_class.truncate(sample_text, 5)).to be_a(String)
-        expect(tokenizer_class.below_limit?(sample_text, 10)).to be_in(
-          [true, false]
-        )
+        expect(tokenizer_class.below_limit?(sample_text, 10)).to be(true).or be(
+               false
+             )
       end
     end
 

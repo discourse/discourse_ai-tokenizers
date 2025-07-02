@@ -1,5 +1,5 @@
 module DiscourseAi
-  module Tokenizers
+  module Tokenizer
     VERSION: String
     # See the writing guide of rbs: https://github.com/ruby/rbs#guides
   end

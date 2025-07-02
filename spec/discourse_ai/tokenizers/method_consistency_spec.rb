@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DiscourseAi::Tokenizers do
+RSpec.describe DiscourseAi::Tokenizer do
   shared_examples "method consistency" do |tokenizer_class|
     let(:test_text) { "Hello world, this is a test sentence!" }
 
@@ -16,7 +16,7 @@ RSpec.describe DiscourseAi::Tokenizers do
 
         # For most tokenizers, these should be different
         # tokenize returns tokens (strings), encode returns token IDs (integers)
-        if tokenizer_class == DiscourseAi::Tokenizers::OpenAiTokenizer
+        if tokenizer_class == DiscourseAi::Tokenizer::OpenAiTokenizer
           # OpenAI tokenizer has identical implementations - this might be a bug
           expect(tokenize_result).to eq(encode_result)
         else
@@ -73,7 +73,7 @@ RSpec.describe DiscourseAi::Tokenizers do
 
     describe "inheritance behavior" do
       it "inherits from BasicTokenizer" do
-        expect(tokenizer_class).to be < DiscourseAi::Tokenizers::BasicTokenizer
+        expect(tokenizer_class).to be < DiscourseAi::Tokenizer::BasicTokenizer
       end
 
       it "overrides the tokenizer method" do
@@ -83,19 +83,18 @@ RSpec.describe DiscourseAi::Tokenizers do
   end
 
   # Test each tokenizer class individually
-  describe DiscourseAi::Tokenizers::BertTokenizer do
-    include_examples "method consistency",
-                     DiscourseAi::Tokenizers::BertTokenizer
+  describe DiscourseAi::Tokenizer::BertTokenizer do
+    include_examples "method consistency", DiscourseAi::Tokenizer::BertTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::AnthropicTokenizer do
+  describe DiscourseAi::Tokenizer::AnthropicTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::AnthropicTokenizer
+                     DiscourseAi::Tokenizer::AnthropicTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::OpenAiTokenizer do
+  describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::OpenAiTokenizer
+                     DiscourseAi::Tokenizer::OpenAiTokenizer
 
     describe "OpenAI tokenizer method overrides" do
       let(:test_text) { "Hello world 👨‍👩‍👧‍👦 test" }
@@ -165,50 +164,49 @@ RSpec.describe DiscourseAi::Tokenizers do
     end
   end
 
-  describe DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer do
+  describe DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer
+                     DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer do
+  describe DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer
+                     DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeLargeEnTokenizer do
+  describe DiscourseAi::Tokenizer::BgeLargeEnTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::BgeLargeEnTokenizer
+                     DiscourseAi::Tokenizer::BgeLargeEnTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeM3Tokenizer do
+  describe DiscourseAi::Tokenizer::BgeM3Tokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::BgeM3Tokenizer
+                     DiscourseAi::Tokenizer::BgeM3Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::Llama3Tokenizer do
+  describe DiscourseAi::Tokenizer::Llama3Tokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::Llama3Tokenizer
+                     DiscourseAi::Tokenizer::Llama3Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::GeminiTokenizer do
+  describe DiscourseAi::Tokenizer::GeminiTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::GeminiTokenizer
+                     DiscourseAi::Tokenizer::GeminiTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::QwenTokenizer do
-    include_examples "method consistency",
-                     DiscourseAi::Tokenizers::QwenTokenizer
+  describe DiscourseAi::Tokenizer::QwenTokenizer do
+    include_examples "method consistency", DiscourseAi::Tokenizer::QwenTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::MistralTokenizer do
+  describe DiscourseAi::Tokenizer::MistralTokenizer do
     include_examples "method consistency",
-                     DiscourseAi::Tokenizers::MistralTokenizer
+                     DiscourseAi::Tokenizer::MistralTokenizer
   end
 
   describe "available_llm_tokenizers accuracy" do
     it "includes all working LLM tokenizers" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       # Check that listed tokenizers actually work
       available.each do |tokenizer_class|
@@ -219,27 +217,27 @@ RSpec.describe DiscourseAi::Tokenizers do
 
     it "matches the class name correctly" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       # Check for the MistralTokenizer name mismatch
-      expect(available).to include(DiscourseAi::Tokenizers::MistralTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::MistralTokenizer)
     end
 
     it "excludes non-LLM tokenizers" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       # These are embedding tokenizers, not LLM tokenizers
-      expect(available).not_to include(DiscourseAi::Tokenizers::BertTokenizer)
+      expect(available).not_to include(DiscourseAi::Tokenizer::BertTokenizer)
       expect(available).not_to include(
-        DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer
+        DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer
       )
       expect(available).not_to include(
-        DiscourseAi::Tokenizers::BgeLargeEnTokenizer
+        DiscourseAi::Tokenizer::BgeLargeEnTokenizer
       )
-      expect(available).not_to include(DiscourseAi::Tokenizers::BgeM3Tokenizer)
+      expect(available).not_to include(DiscourseAi::Tokenizer::BgeM3Tokenizer)
       expect(available).not_to include(
-        DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer
+        DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer
       )
     end
   end

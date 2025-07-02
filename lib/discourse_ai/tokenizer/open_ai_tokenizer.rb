@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DiscourseAi
-  module Tokenizers
+  module Tokenizer
     # Wrapper for OpenAI tokenizer library for compatibility with Discourse AI API
     class OpenAiTokenizer < BasicTokenizer
       class << self

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DiscourseAi::Tokenizers do
+RSpec.describe DiscourseAi::Tokenizer do
   shared_examples "integration tests" do |tokenizer_class|
     let(:test_texts) do
       [
@@ -59,7 +59,7 @@ RSpec.describe DiscourseAi::Tokenizers do
 
       it "returns the expected tokenizer type" do
         tokenizer = tokenizer_class.tokenizer
-        if tokenizer_class == DiscourseAi::Tokenizers::OpenAiTokenizer
+        if tokenizer_class == DiscourseAi::Tokenizer::OpenAiTokenizer
           expect(tokenizer.class.name).to include("Tiktoken")
         else
           expect(tokenizer).to be_a(Tokenizers::Tokenizer)
@@ -114,58 +114,57 @@ RSpec.describe DiscourseAi::Tokenizers do
   end
 
   # Test each tokenizer class individually
-  describe DiscourseAi::Tokenizers::BertTokenizer do
-    include_examples "integration tests", DiscourseAi::Tokenizers::BertTokenizer
+  describe DiscourseAi::Tokenizer::BertTokenizer do
+    include_examples "integration tests", DiscourseAi::Tokenizer::BertTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::AnthropicTokenizer do
+  describe DiscourseAi::Tokenizer::AnthropicTokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::AnthropicTokenizer
+                     DiscourseAi::Tokenizer::AnthropicTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::OpenAiTokenizer do
+  describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::OpenAiTokenizer
+                     DiscourseAi::Tokenizer::OpenAiTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer do
+  describe DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer
+                     DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer do
+  describe DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer
+                     DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeLargeEnTokenizer do
+  describe DiscourseAi::Tokenizer::BgeLargeEnTokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::BgeLargeEnTokenizer
+                     DiscourseAi::Tokenizer::BgeLargeEnTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeM3Tokenizer do
+  describe DiscourseAi::Tokenizer::BgeM3Tokenizer do
+    include_examples "integration tests", DiscourseAi::Tokenizer::BgeM3Tokenizer
+  end
+
+  describe DiscourseAi::Tokenizer::Llama3Tokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::BgeM3Tokenizer
+                     DiscourseAi::Tokenizer::Llama3Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::Llama3Tokenizer do
+  describe DiscourseAi::Tokenizer::GeminiTokenizer do
     include_examples "integration tests",
-                     DiscourseAi::Tokenizers::Llama3Tokenizer
+                     DiscourseAi::Tokenizer::GeminiTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::GeminiTokenizer do
-    include_examples "integration tests",
-                     DiscourseAi::Tokenizers::GeminiTokenizer
-  end
-
-  describe DiscourseAi::Tokenizers::QwenTokenizer do
-    include_examples "integration tests", DiscourseAi::Tokenizers::QwenTokenizer
+  describe DiscourseAi::Tokenizer::QwenTokenizer do
+    include_examples "integration tests", DiscourseAi::Tokenizer::QwenTokenizer
   end
 
   describe "available_llm_tokenizers validation" do
     it "includes only working tokenizers" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       available.each do |tokenizer_class|
         expect { tokenizer_class.tokenizer }.not_to raise_error
@@ -175,13 +174,13 @@ RSpec.describe DiscourseAi::Tokenizers do
 
     it "includes expected tokenizer classes" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
-      expect(available).to include(DiscourseAi::Tokenizers::AnthropicTokenizer)
-      expect(available).to include(DiscourseAi::Tokenizers::GeminiTokenizer)
-      expect(available).to include(DiscourseAi::Tokenizers::Llama3Tokenizer)
-      expect(available).to include(DiscourseAi::Tokenizers::OpenAiTokenizer)
-      expect(available).to include(DiscourseAi::Tokenizers::QwenTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::AnthropicTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::GeminiTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::Llama3Tokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::OpenAiTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::QwenTokenizer)
     end
   end
 end

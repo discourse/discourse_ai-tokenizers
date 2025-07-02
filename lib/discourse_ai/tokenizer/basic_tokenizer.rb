@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 module DiscourseAi
-  module Tokenizers
+  module Tokenizer
     # Base class for tokenizers to inherit from
     class BasicTokenizer
       class << self
         def available_llm_tokenizers
           [
-            DiscourseAi::Tokenizers::AnthropicTokenizer,
-            DiscourseAi::Tokenizers::GeminiTokenizer,
-            DiscourseAi::Tokenizers::Llama3Tokenizer,
-            DiscourseAi::Tokenizers::MistralTokenizer,
-            DiscourseAi::Tokenizers::OpenAiTokenizer,
-            DiscourseAi::Tokenizers::QwenTokenizer
+            DiscourseAi::Tokenizer::AnthropicTokenizer,
+            DiscourseAi::Tokenizer::GeminiTokenizer,
+            DiscourseAi::Tokenizer::Llama3Tokenizer,
+            DiscourseAi::Tokenizer::MistralTokenizer,
+            DiscourseAi::Tokenizer::OpenAiTokenizer,
+            DiscourseAi::Tokenizer::QwenTokenizer
           ]
         end
 

@@ -142,63 +142,63 @@ RSpec.describe DiscourseAi::Tokenizers do
   end
 
   # Test each tokenizer class individually
-  describe DiscourseAi::Tokenizers::BertTokenizer do
+  describe DiscourseAi::Tokenizer::BertTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::BertTokenizer
+                     DiscourseAi::Tokenizer::BertTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::AnthropicTokenizer do
+  describe DiscourseAi::Tokenizer::AnthropicTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::AnthropicTokenizer
+                     DiscourseAi::Tokenizer::AnthropicTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::OpenAiTokenizer do
+  describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::OpenAiTokenizer
+                     DiscourseAi::Tokenizer::OpenAiTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer do
+  describe DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer
+                     DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer do
+  describe DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer
+                     DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeLargeEnTokenizer do
+  describe DiscourseAi::Tokenizer::BgeLargeEnTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::BgeLargeEnTokenizer
+                     DiscourseAi::Tokenizer::BgeLargeEnTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::BgeM3Tokenizer do
+  describe DiscourseAi::Tokenizer::BgeM3Tokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::BgeM3Tokenizer
+                     DiscourseAi::Tokenizer::BgeM3Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::Llama3Tokenizer do
+  describe DiscourseAi::Tokenizer::Llama3Tokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::Llama3Tokenizer
+                     DiscourseAi::Tokenizer::Llama3Tokenizer
   end
 
-  describe DiscourseAi::Tokenizers::GeminiTokenizer do
+  describe DiscourseAi::Tokenizer::GeminiTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::GeminiTokenizer
+                     DiscourseAi::Tokenizer::GeminiTokenizer
   end
 
-  describe DiscourseAi::Tokenizers::QwenTokenizer do
+  describe DiscourseAi::Tokenizer::QwenTokenizer do
     include_examples "tokenizer error handling",
-                     DiscourseAi::Tokenizers::QwenTokenizer
+                     DiscourseAi::Tokenizer::QwenTokenizer
   end
 
   describe "large input handling" do
     let(:large_text) { "Lorem ipsum dolor sit amet. " * 1000 }
     let(:tokenizers) do
       [
-        DiscourseAi::Tokenizers::BertTokenizer,
-        DiscourseAi::Tokenizers::AnthropicTokenizer,
-        DiscourseAi::Tokenizers::OpenAiTokenizer
+        DiscourseAi::Tokenizer::BertTokenizer,
+        DiscourseAi::Tokenizer::AnthropicTokenizer,
+        DiscourseAi::Tokenizer::OpenAiTokenizer
       ]
     end
 

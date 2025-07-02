@@ -3,11 +3,11 @@
 require "spec_helper"
 require "active_support/core_ext/string/inflections"
 
-RSpec.describe DiscourseAi::Tokenizers do
+RSpec.describe DiscourseAi::Tokenizer do
   describe "Comprehensive tokenizer coverage" do
     let(:all_tokenizer_files) do
       Dir
-        .glob("lib/discourse_ai/tokenizers/*_tokenizer.rb")
+        .glob("lib/discourse_ai/tokenizer/*_tokenizer.rb")
         .map { |file| File.basename(file, ".rb") }
     end
 
@@ -18,7 +18,7 @@ RSpec.describe DiscourseAi::Tokenizers do
         next if file == "basic_tokenizer" # Skip base class
 
         class_name = file.camelize
-        expect(DiscourseAi::Tokenizers.const_defined?(class_name)).to be(true),
+        expect(DiscourseAi::Tokenizer.const_defined?(class_name)).to be(true),
         "File #{file} exists but class #{class_name} is not defined - shared examples won't cover it"
       end
     end
@@ -27,7 +27,7 @@ RSpec.describe DiscourseAi::Tokenizers do
   describe "Integration with available_llm_tokenizers" do
     it "all available LLM tokenizers are functional" do
       available =
-        DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
+        DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       available.each do |tokenizer_class|
         expect { tokenizer_class.tokenizer }.not_to raise_error
@@ -41,15 +41,15 @@ RSpec.describe DiscourseAi::Tokenizers do
     let(:tokenizer_classes) do
       all_tokenizer_files =
         Dir
-          .glob("lib/discourse_ai/tokenizers/*_tokenizer.rb")
+          .glob("lib/discourse_ai/tokenizer/*_tokenizer.rb")
           .map { |file| File.basename(file, ".rb") }
 
       all_tokenizer_files.filter_map do |file|
         next if file == "basic_tokenizer" # Skip base class
 
         class_name = file.camelize
-        if DiscourseAi::Tokenizers.const_defined?(class_name)
-          DiscourseAi::Tokenizers.const_get(class_name)
+        if DiscourseAi::Tokenizer.const_defined?(class_name)
+          DiscourseAi::Tokenizer.const_get(class_name)
         end
       end
     end

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DiscourseAi::Tokenizers::BasicTokenizer do
+RSpec.describe DiscourseAi::Tokenizer::BasicTokenizer do
   describe ".available_llm_tokenizers" do
     it "returns an array of tokenizer classes" do
       tokenizers = described_class.available_llm_tokenizers
@@ -12,11 +12,11 @@ RSpec.describe DiscourseAi::Tokenizers::BasicTokenizer do
 
     it "includes expected tokenizer classes" do
       tokenizers = described_class.available_llm_tokenizers
-      expect(tokenizers).to include(DiscourseAi::Tokenizers::AnthropicTokenizer)
-      expect(tokenizers).to include(DiscourseAi::Tokenizers::GeminiTokenizer)
-      expect(tokenizers).to include(DiscourseAi::Tokenizers::Llama3Tokenizer)
-      expect(tokenizers).to include(DiscourseAi::Tokenizers::OpenAiTokenizer)
-      expect(tokenizers).to include(DiscourseAi::Tokenizers::QwenTokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::AnthropicTokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::GeminiTokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::Llama3Tokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::OpenAiTokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::QwenTokenizer)
     end
 
     it "returns only class objects" do

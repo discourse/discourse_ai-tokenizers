@@ -3,23 +3,31 @@
 require "tokenizers"
 require "tiktoken_ruby"
 require_relative "tokenizers/version"
-require_relative "tokenizers/basic_tokenizer"
-require_relative "tokenizers/bert_tokenizer"
-require_relative "tokenizers/anthropic_tokenizer"
-require_relative "tokenizers/open_ai_tokenizer"
-require_relative "tokenizers/all_mpnet_base_v2_tokenizer"
-require_relative "tokenizers/multilingual_e5_large_tokenizer"
-require_relative "tokenizers/bge_large_en_tokenizer"
-require_relative "tokenizers/bge_m3_tokenizer"
-require_relative "tokenizers/llama3_tokenizer"
-require_relative "tokenizers/gemini_tokenizer"
-require_relative "tokenizers/qwen_tokenizer"
-require_relative "tokenizers/mistral_tokenizer"
+
+require_relative "tokenizer/basic_tokenizer"
+require_relative "tokenizer/bert_tokenizer"
+require_relative "tokenizer/anthropic_tokenizer"
+require_relative "tokenizer/open_ai_tokenizer"
+require_relative "tokenizer/all_mpnet_base_v2_tokenizer"
+require_relative "tokenizer/multilingual_e5_large_tokenizer"
+require_relative "tokenizer/bge_large_en_tokenizer"
+require_relative "tokenizer/bge_m3_tokenizer"
+require_relative "tokenizer/llama3_tokenizer"
+require_relative "tokenizer/gemini_tokenizer"
+require_relative "tokenizer/qwen_tokenizer"
+require_relative "tokenizer/mistral_tokenizer"
 
 module DiscourseAi
   module Tokenizers
     class Error < StandardError
     end
-    # Your code goes here...
+
+    def self.gem_root
+      @gem_root ||= File.expand_path("../../..", __FILE__)
+    end
+
+    def self.vendor_path(filename)
+      File.join(gem_root, "vendor", filename)
+    end
   end
 end

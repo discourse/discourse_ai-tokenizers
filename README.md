@@ -39,27 +39,27 @@ gem install discourse_ai-tokenizers
 require 'discourse_ai/tokenizers'
 
 # Get token count
-DiscourseAi::Tokenizers::OpenAiTokenizer.size("Hello world!")
+DiscourseAi::Tokenizer::OpenAiTokenizer.size("Hello world!")
 # => 3
 
 # Tokenize text
-DiscourseAi::Tokenizers::OpenAiTokenizer.tokenize("Hello world!")
+DiscourseAi::Tokenizer::OpenAiTokenizer.tokenize("Hello world!")
 # => [9906, 1917, 0]
 
 # Encode text to token IDs
-DiscourseAi::Tokenizers::OpenAiTokenizer.encode("Hello world!")
+DiscourseAi::Tokenizer::OpenAiTokenizer.encode("Hello world!")
 # => [9906, 1917, 0]
 
 # Decode token IDs back to text
-DiscourseAi::Tokenizers::OpenAiTokenizer.decode([9906, 1917, 0])
+DiscourseAi::Tokenizer::OpenAiTokenizer.decode([9906, 1917, 0])
 # => "Hello world!"
 
 # Truncate text to token limit
-DiscourseAi::Tokenizers::OpenAiTokenizer.truncate("This is a long sentence", 5)
+DiscourseAi::Tokenizer::OpenAiTokenizer.truncate("This is a long sentence", 5)
 # => "This is a"
 
 # Check if text is within token limit
-DiscourseAi::Tokenizers::OpenAiTokenizer.below_limit?("Short text", 10)
+DiscourseAi::Tokenizer::OpenAiTokenizer.below_limit?("Short text", 10)
 # => true
 ```
 
@@ -67,27 +67,27 @@ DiscourseAi::Tokenizers::OpenAiTokenizer.below_limit?("Short text", 10)
 
 #### LLM Tokenizers
 
-- `DiscourseAi::Tokenizers::AnthropicTokenizer` - Claude models
-- `DiscourseAi::Tokenizers::OpenAiTokenizer` - GPT models
-- `DiscourseAi::Tokenizers::GeminiTokenizer` - Google Gemini
-- `DiscourseAi::Tokenizers::Llama3Tokenizer` - Meta Llama 3
-- `DiscourseAi::Tokenizers::QwenTokenizer` - Alibaba Qwen
-- `DiscourseAi::Tokenizers::MistralTokenizer` - Mistral models
+- `DiscourseAi::Tokenizer::AnthropicTokenizer` - Claude models
+- `DiscourseAi::Tokenizer::OpenAiTokenizer` - GPT models
+- `DiscourseAi::Tokenizer::GeminiTokenizer` - Google Gemini
+- `DiscourseAi::Tokenizer::Llama3Tokenizer` - Meta Llama 3
+- `DiscourseAi::Tokenizer::QwenTokenizer` - Alibaba Qwen
+- `DiscourseAi::Tokenizer::MistralTokenizer` - Mistral models
 
 #### Embedding Tokenizers
 
-- `DiscourseAi::Tokenizers::BertTokenizer` - BERT-based models
-- `DiscourseAi::Tokenizers::AllMpnetBaseV2Tokenizer` - sentence-transformers/all-mpnet-base-v2
-- `DiscourseAi::Tokenizers::BgeLargeEnTokenizer` - BAAI/bge-large-en
-- `DiscourseAi::Tokenizers::BgeM3Tokenizer` - BAAI/bge-m3
-- `DiscourseAi::Tokenizers::MultilingualE5LargeTokenizer` - intfloat/multilingual-e5-large
+- `DiscourseAi::Tokenizer::BertTokenizer` - BERT-based models
+- `DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer` - sentence-transformers/all-mpnet-base-v2
+- `DiscourseAi::Tokenizer::BgeLargeEnTokenizer` - BAAI/bge-large-en
+- `DiscourseAi::Tokenizer::BgeM3Tokenizer` - BAAI/bge-m3
+- `DiscourseAi::Tokenizer::MultilingualE5LargeTokenizer` - intfloat/multilingual-e5-large
 
 ### Getting Available LLM Tokenizers
 
 ```ruby
 # Get all available LLM tokenizers dynamically
-DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
-# => [DiscourseAi::Tokenizers::AnthropicTokenizer, DiscourseAi::Tokenizers::OpenAiTokenizer, ...]
+DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
+# => [DiscourseAi::Tokenizer::AnthropicTokenizer, DiscourseAi::Tokenizer::OpenAiTokenizer, ...]
 ```
 
 ### Advanced Usage
@@ -96,10 +96,10 @@ DiscourseAi::Tokenizers::BasicTokenizer.available_llm_tokenizers
 
 ```ruby
 # Strict mode ensures exact token limit compliance
-DiscourseAi::Tokenizers::OpenAiTokenizer.truncate("Long text here", 5, strict: true)
+DiscourseAi::Tokenizer::OpenAiTokenizer.truncate("Long text here", 5, strict: true)
 
 # Check limits with strict mode
-DiscourseAi::Tokenizers::OpenAiTokenizer.below_limit?("Text", 10, strict: true)
+DiscourseAi::Tokenizer::OpenAiTokenizer.below_limit?("Text", 10, strict: true)
 ```
 
 #### Unicode and Emoji Support
@@ -107,11 +107,11 @@ DiscourseAi::Tokenizers::OpenAiTokenizer.below_limit?("Text", 10, strict: true)
 ```ruby
 # Handles unicode characters properly
 text = "Hello 世界 🌍 👨‍👩‍👧‍👦"
-DiscourseAi::Tokenizers::OpenAiTokenizer.size(text)
+DiscourseAi::Tokenizer::OpenAiTokenizer.size(text)
 # => 8
 
 # Truncation preserves unicode integrity
-truncated = DiscourseAi::Tokenizers::OpenAiTokenizer.truncate(text, 5)
+truncated = DiscourseAi::Tokenizer::OpenAiTokenizer.truncate(text, 5)
 # => "Hello 世界 🌍"
 ```
 
@@ -157,4 +157,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the DiscourseAi::Tokenizers project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).
+Everyone interacting in the DiscourseAi::Tokenizer project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](CODE_OF_CONDUCT.md).

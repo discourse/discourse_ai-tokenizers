@@ -3,7 +3,7 @@
 module DiscourseAi
   module Tokenizer
     # Wrapper for OpenAI tokenizer library for compatibility with Discourse AI API
-    class OpenAiO200kTokenizer < BasicTokenizer
+    class OpenAiTokenizer < BasicTokenizer
       class << self
         def tokenizer
           @tokenizer ||= Tiktoken.get_encoding("o200k_base")
@@ -55,6 +55,6 @@ module DiscourseAi
       end
     end
 
-    OpenAiTokenizer = OpenAiO200kTokenizer
+    OpenAiO200kTokenizer = OpenAiTokenizer
   end
 end

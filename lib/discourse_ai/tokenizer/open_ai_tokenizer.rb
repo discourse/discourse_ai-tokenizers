@@ -20,20 +20,26 @@ module DiscourseAi
         def decode(token_ids)
           tokenizer.decode(token_ids)
         rescue Tiktoken::UnicodeError
-          # Handle invalid token IDs gracefully by returning empty string
-          ""
-        end
+          token_ids = token_ids.dup
 
-        def safe_decode(token_ids)
-          tokenizer.decode(token_ids)
-        rescue Tiktoken::UnicodeError
-          # Token slice created incomplete UTF-8 sequence
-          # Decode individual tokens and join, skipping any that fail
+          # this easy case, we started with a valid sequnce but truncated it on an invalid boundary
+          # work backwards removing tokens until we can decode again
+          tries = 4
+          while tries > 0
+            begin
+              token_ids.pop
+              return tokenizer.decode(token_ids)
+            rescue Tiktoken::UnicodeError
+              tries -= 1
+            end
+          end
+
+          # at this point we may have a corrupted sequence so just decode what we can
           token_ids
             .map do |id|
               begin
                 tokenizer.decode([id])
-              rescue StandardError
+              rescue Tiktoken::UnicodeError
                 ""
               end
             end
@@ -49,12 +55,12 @@ module DiscourseAi
 
           # Take tokens up to max_length, decode, then ensure we don't exceed limit
           truncated_tokens = tokenize(text).take(max_length)
-          truncated_text = safe_decode(truncated_tokens)
+          truncated_text = decode(truncated_tokens)
 
           # If re-encoding exceeds the limit, we need to further truncate
           while tokenize(truncated_text).length > max_length
             truncated_tokens = truncated_tokens[0...-1]
-            truncated_text = safe_decode(truncated_tokens)
+            truncated_text = decode(truncated_tokens)
             break if truncated_tokens.empty?
           end
 

@@ -187,15 +187,16 @@ RSpec.describe DiscourseAi::Tokenizers do
       end
 
       it "truncates multi-byte UTF-8 text correctly" do
-        text = "日本語テスト 🎉 中文测试 العربية"
+        text = "a 🎉 a 🎉 a"
 
-        result = tokenizer.truncate(text, 4, strict: true)
-        expect(result).to eq("日本語テスト")
-        expect(tokenizer.size(result)).to eq(4)
+        result = tokenizer.truncate(text, 2, strict: true)
+        expect(result).to eq("a")
 
-        result = tokenizer.truncate(text, 7, strict: true)
-        expect(result).to eq("日本語テスト 🎉 中文")
-        expect(tokenizer.size(result)).to eq(7)
+        result = tokenizer.truncate(text, 3, strict: true)
+        expect(result).to eq("a 🎉")
+
+        result = tokenizer.truncate(text, 5, strict: true)
+        expect(result).to eq("a 🎉 a")
       end
 
       it "never exceeds the requested token limit" do

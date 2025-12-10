@@ -174,6 +174,46 @@ RSpec.describe DiscourseAi::Tokenizers do
   describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "tokenizer error handling",
                      DiscourseAi::Tokenizer::OpenAiTokenizer
+
+    describe "truncation correctness" do
+      let(:tokenizer) { DiscourseAi::Tokenizer::OpenAiTokenizer }
+
+      it "truncates simple ASCII text correctly" do
+        text = "Hello world this is a test"
+        result = tokenizer.truncate(text, 3, strict: true)
+
+        expect(result).to eq("Hello world this")
+        expect(tokenizer.size(result)).to be <= 3
+      end
+
+      it "truncates multi-byte UTF-8 text correctly" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+
+        result = tokenizer.truncate(text, 4, strict: true)
+        expect(result).to eq("日本語テスト")
+        expect(tokenizer.size(result)).to eq(4)
+
+        result = tokenizer.truncate(text, 7, strict: true)
+        expect(result).to eq("日本語テスト 🎉 中文")
+        expect(tokenizer.size(result)).to eq(7)
+      end
+
+      it "never exceeds the requested token limit" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+
+        (1..tokenizer.size(text)).each do |limit|
+          result = tokenizer.truncate(text, limit, strict: true)
+          expect(tokenizer.size(result)).to be <= limit
+        end
+      end
+
+      it "preserves text prefix when truncating" do
+        text = "Hello 世界 test"
+        result = tokenizer.truncate(text, 2, strict: true)
+
+        expect(text).to start_with(result)
+      end
+    end
   end
 
   describe DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer do

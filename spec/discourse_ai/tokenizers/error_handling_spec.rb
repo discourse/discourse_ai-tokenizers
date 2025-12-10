@@ -84,6 +84,25 @@ RSpec.describe DiscourseAi::Tokenizers do
           expect(decoded).to include("世界")
         end
       end
+
+      it "handles truncation at all token boundaries without raising" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+        token_count = tokenizer_class.size(text)
+
+        (1..token_count).each do |i|
+          expect {
+            tokenizer_class.truncate(text, i, strict: true)
+          }.not_to raise_error
+        end
+      end
+
+      it "returns valid UTF-8 strings when truncating multi-byte characters" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+
+        result = tokenizer_class.truncate(text, 5, strict: true)
+        expect(result).to be_a(String)
+        expect(result.valid_encoding?).to be true
+      end
     end
 
     describe "edge case parameters" do

@@ -11,3 +11,4 @@
 
 *.gem
 .rspec_status
+Gemfile.lock

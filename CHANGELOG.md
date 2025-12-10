@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.3.2] - 2025-12-10
+
+- Fix truncation logic in OpenAiTokenizer could lead to string parsing fails
+
 ## [0.3.1] - 2025-07-07
 
 - Refactor OpenAiO200kTokenizer class to OpenAiTokenizer as primary class name

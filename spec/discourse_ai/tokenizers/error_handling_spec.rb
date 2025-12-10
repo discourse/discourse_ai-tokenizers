@@ -84,6 +84,25 @@ RSpec.describe DiscourseAi::Tokenizers do
           expect(decoded).to include("世界")
         end
       end
+
+      it "handles truncation at all token boundaries without raising" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+        token_count = tokenizer_class.size(text)
+
+        (1..token_count).each do |i|
+          expect {
+            tokenizer_class.truncate(text, i, strict: true)
+          }.not_to raise_error
+        end
+      end
+
+      it "returns valid UTF-8 strings when truncating multi-byte characters" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+
+        result = tokenizer_class.truncate(text, 5, strict: true)
+        expect(result).to be_a(String)
+        expect(result.valid_encoding?).to be true
+      end
     end
 
     describe "edge case parameters" do
@@ -155,6 +174,47 @@ RSpec.describe DiscourseAi::Tokenizers do
   describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "tokenizer error handling",
                      DiscourseAi::Tokenizer::OpenAiTokenizer
+
+    describe "truncation correctness" do
+      let(:tokenizer) { DiscourseAi::Tokenizer::OpenAiTokenizer }
+
+      it "truncates simple ASCII text correctly" do
+        text = "Hello world this is a test"
+        result = tokenizer.truncate(text, 3, strict: true)
+
+        expect(result).to eq("Hello world this")
+        expect(tokenizer.size(result)).to be <= 3
+      end
+
+      it "truncates multi-byte UTF-8 text correctly" do
+        text = "a 🎉 a 🎉 a"
+
+        result = tokenizer.truncate(text, 2, strict: true)
+        expect(result).to eq("a")
+
+        result = tokenizer.truncate(text, 3, strict: true)
+        expect(result).to eq("a 🎉")
+
+        result = tokenizer.truncate(text, 5, strict: true)
+        expect(result).to eq("a 🎉 a")
+      end
+
+      it "never exceeds the requested token limit" do
+        text = "日本語テスト 🎉 中文测试 العربية"
+
+        (1..tokenizer.size(text)).each do |limit|
+          result = tokenizer.truncate(text, limit, strict: true)
+          expect(tokenizer.size(result)).to be <= limit
+        end
+      end
+
+      it "preserves text prefix when truncating" do
+        text = "Hello 世界 test"
+        result = tokenizer.truncate(text, 2, strict: true)
+
+        expect(text).to start_with(result)
+      end
+    end
   end
 
   describe DiscourseAi::Tokenizer::AllMpnetBaseV2Tokenizer do

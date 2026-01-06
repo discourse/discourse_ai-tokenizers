@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.4.0] - 2026-01-06
+
+- Add Ruby 4.0 compatibility
+
 ## [0.3.2] - 2025-12-10
 
 - Fix truncation logic in OpenAiTokenizer could lead to string parsing fails

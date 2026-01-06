@@ -30,9 +30,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib vendor]
 
   spec.add_dependency "activesupport", ">= 6.0"
-  spec.add_dependency "tiktoken_ruby", "~> 0.0.11.1"
-  spec.add_dependency "tokenizers", "~> 0.5.4"
+  spec.add_dependency "tiktoken_ruby", "~> 0.0.15"
+  spec.add_dependency "tokenizers", "~> 0.6.3"
 
-  spec.add_development_dependency "rubocop-discourse", "= 3.8.1"
+  spec.add_development_dependency "rubocop-discourse", "~> 3.8"
   spec.add_development_dependency "syntax_tree", "~> 6.2.0"
 end

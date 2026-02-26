@@ -4,17 +4,22 @@ module DiscourseAi
   module Tokenizer
     # Wrapper for OpenAI tokenizer library for compatibility with Discourse AI API
     class OpenAiTokenizer < BasicTokenizer
+      # tiktoken-rs uses fancy-regex which can stack overflow on large inputs
+      # due to catastrophic backtracking (github.com/openai/tiktoken/issues/245).
+      # Chunking at whitespace boundaries prevents this while preserving accuracy.
+      SAFE_CHUNK_SIZE = 50_000
+
       class << self
         def tokenizer
           @tokenizer ||= Tiktoken.get_encoding("o200k_base")
         end
 
         def tokenize(text)
-          tokenizer.encode(text)
+          safe_encode(text)
         end
 
         def encode(text)
-          tokenizer.encode(text)
+          safe_encode(text)
         end
 
         def decode(token_ids)
@@ -72,7 +77,34 @@ module DiscourseAi
           # than can take more than 1 token per char
           return true if !strict && text.size < limit / 2
 
-          tokenizer.encode(text).length < limit
+          safe_encode(text).length < limit
+        end
+
+        private
+
+        def safe_encode(text)
+          if !text.is_a?(String) || text.size <= SAFE_CHUNK_SIZE
+            return tokenizer.encode(text)
+          end
+
+          tokens = []
+          offset = 0
+          while offset < text.size
+            chunk_end = offset + SAFE_CHUNK_SIZE
+
+            if chunk_end < text.size
+              # Split at a whitespace boundary to preserve tokenization accuracy
+              break_point = text.rindex(/\s/, chunk_end)
+              chunk_end = break_point if break_point && break_point > offset
+            else
+              chunk_end = text.size
+            end
+
+            tokens.concat(tokenizer.encode(text[offset...chunk_end]))
+            offset = chunk_end
+          end
+
+          tokens
         end
       end
     end

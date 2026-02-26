@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.4.1] - 2026-02-26
+
+- Fix tiktoken-rs stack overflow crash by chunking large inputs at whitespace boundaries before encoding
+
 ## [0.4.0] - 2026-01-06
 
 - Add Ruby 4.0 compatibility

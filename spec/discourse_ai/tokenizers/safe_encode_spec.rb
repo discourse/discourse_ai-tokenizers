@@ -127,7 +127,8 @@ RSpec.describe DiscourseAi::Tokenizer::OpenAiTokenizer do
           tokenizer_class.truncate(invalid_binary_text, limit, strict: true)
         ).to eq(tokenizer_class.truncate(normalized_text, limit, strict: true))
 
-        [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq.each do |current_limit|
+        [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+          .each do |current_limit|
           expect(
             tokenizer_class.below_limit?(
               invalid_binary_text,
@@ -135,7 +136,11 @@ RSpec.describe DiscourseAi::Tokenizer::OpenAiTokenizer do
               strict: true
             )
           ).to eq(
-            tokenizer_class.below_limit?(normalized_text, current_limit, strict: true)
+            tokenizer_class.below_limit?(
+              normalized_text,
+              current_limit,
+              strict: true
+            )
           )
           expect(
             tokenizer_class.below_limit?(

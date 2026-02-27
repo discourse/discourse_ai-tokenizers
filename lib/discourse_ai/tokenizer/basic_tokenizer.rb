@@ -89,7 +89,8 @@ module DiscourseAi
           end
 
           normalized.valid_encoding? ? normalized : normalized.scrub
-        rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError
+        rescue Encoding::UndefinedConversionError,
+               Encoding::InvalidByteSequenceError
           text.encode(Encoding::UTF_8, invalid: :replace, undef: :replace)
         end
       end

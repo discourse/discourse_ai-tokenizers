@@ -106,9 +106,7 @@ RSpec.describe DiscourseAi::Tokenizers do
 
       it "handles ASCII-8BIT text in truncate" do
         utf8_text = "日本語テスト 🎉 中文测试 العربية"
-        text = utf8_text.dup.force_encoding(
-          Encoding::ASCII_8BIT
-        )
+        text = utf8_text.dup.force_encoding(Encoding::ASCII_8BIT)
 
         limit = 5
         utf8_result = tokenizer_class.truncate(utf8_text, limit, strict: true)
@@ -123,26 +121,28 @@ RSpec.describe DiscourseAi::Tokenizers do
 
       it "handles ASCII-8BIT text in below_limit?" do
         utf8_text = "日本語テスト 🎉 中文测试 العربية"
-        text = utf8_text.dup.force_encoding(
-          Encoding::ASCII_8BIT
-        )
+        text = utf8_text.dup.force_encoding(Encoding::ASCII_8BIT)
         token_count = tokenizer_class.size(utf8_text)
-        limits = [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+        limits = [
+          1,
+          [token_count - 1, 1].max,
+          token_count,
+          token_count + 1
+        ].uniq
 
         limits.each do |limit|
           expect(tokenizer_class.below_limit?(text, limit, strict: true)).to eq(
             tokenizer_class.below_limit?(utf8_text, limit, strict: true)
           )
-          expect(tokenizer_class.below_limit?(text, limit, strict: false)).to eq(
-            tokenizer_class.below_limit?(utf8_text, limit, strict: false)
-          )
+          expect(
+            tokenizer_class.below_limit?(text, limit, strict: false)
+          ).to eq(tokenizer_class.below_limit?(utf8_text, limit, strict: false))
         end
       end
 
       it "always returns valid UTF-8 from chained truncation" do
-        invalid_utf8 = "日本語テスト".bytes[0..-2].pack("C*").force_encoding(
-          Encoding::UTF_8
-        )
+        invalid_utf8 =
+          "日本語テスト".bytes[0..-2].pack("C*").force_encoding(Encoding::UTF_8)
         expect(invalid_utf8.valid_encoding?).to be false
 
         first = tokenizer_class.truncate(invalid_utf8, 5, strict: true)
@@ -184,7 +184,9 @@ RSpec.describe DiscourseAi::Tokenizers do
           expect(tokenizer_class.tokenize(input)).to eq(
             tokenizer_class.tokenize(normalized)
           )
-          expect(tokenizer_class.size(input)).to eq(tokenizer_class.size(normalized))
+          expect(tokenizer_class.size(input)).to eq(
+            tokenizer_class.size(normalized)
+          )
           expect(tokenizer_class.encode(input)).to eq(
             tokenizer_class.encode(normalized)
           )
@@ -194,24 +196,34 @@ RSpec.describe DiscourseAi::Tokenizers do
       it "normalizes truncate and below_limit? inputs" do
         normalized_cases.each do |input, normalized|
           token_count = tokenizer_class.size(normalized)
-          limits = [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+          limits = [
+            1,
+            [token_count - 1, 1].max,
+            token_count,
+            token_count + 1
+          ].uniq
 
-          strict_truncation = tokenizer_class.truncate(
-            input,
-            [token_count, 1].max,
-            strict: true
-          )
+          strict_truncation =
+            tokenizer_class.truncate(input, [token_count, 1].max, strict: true)
           expect(strict_truncation.encoding).to eq(Encoding::UTF_8)
           expect(strict_truncation.valid_encoding?).to be true
           expect(strict_truncation).to eq(
-            tokenizer_class.truncate(normalized, [token_count, 1].max, strict: true)
+            tokenizer_class.truncate(
+              normalized,
+              [token_count, 1].max,
+              strict: true
+            )
           )
 
           limits.each do |limit|
-            expect(tokenizer_class.below_limit?(input, limit, strict: true)).to eq(
+            expect(
+              tokenizer_class.below_limit?(input, limit, strict: true)
+            ).to eq(
               tokenizer_class.below_limit?(normalized, limit, strict: true)
             )
-            expect(tokenizer_class.below_limit?(input, limit, strict: false)).to eq(
+            expect(
+              tokenizer_class.below_limit?(input, limit, strict: false)
+            ).to eq(
               tokenizer_class.below_limit?(normalized, limit, strict: false)
             )
           end

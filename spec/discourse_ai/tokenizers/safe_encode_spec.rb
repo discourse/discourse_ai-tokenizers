@@ -100,6 +100,64 @@ RSpec.describe DiscourseAi::Tokenizer::OpenAiTokenizer do
         expect(result.length).to be < text.length
       end
     end
+
+    describe "invalid UTF-8 handling with chunking" do
+      let(:invalid_binary_text) { ("word \xFF\xFE " * 10_000).b }
+      let(:normalized_text) do
+        invalid_binary_text.dup.force_encoding(Encoding::UTF_8).scrub
+      end
+
+      it "normalizes tokenize and encode inputs before chunking" do
+        expect(invalid_binary_text.size).to be > chunk_size
+        expect(tokenizer_class.tokenize(invalid_binary_text)).to eq(
+          tokenizer_class.tokenize(normalized_text)
+        )
+        expect(tokenizer_class.encode(invalid_binary_text)).to eq(
+          tokenizer_class.encode(normalized_text)
+        )
+      end
+
+      it "normalizes truncate and below_limit? inputs before checks" do
+        expect(invalid_binary_text.size).to be > chunk_size
+
+        token_count = tokenizer_class.size(normalized_text)
+        limit = [token_count, 1].max
+
+        expect(
+          tokenizer_class.truncate(invalid_binary_text, limit, strict: true)
+        ).to eq(tokenizer_class.truncate(normalized_text, limit, strict: true))
+
+        [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+          .each do |current_limit|
+          expect(
+            tokenizer_class.below_limit?(
+              invalid_binary_text,
+              current_limit,
+              strict: true
+            )
+          ).to eq(
+            tokenizer_class.below_limit?(
+              normalized_text,
+              current_limit,
+              strict: true
+            )
+          )
+          expect(
+            tokenizer_class.below_limit?(
+              invalid_binary_text,
+              current_limit,
+              strict: false
+            )
+          ).to eq(
+            tokenizer_class.below_limit?(
+              normalized_text,
+              current_limit,
+              strict: false
+            )
+          )
+        end
+      end
+    end
   end
 
   describe DiscourseAi::Tokenizer::OpenAiTokenizer do

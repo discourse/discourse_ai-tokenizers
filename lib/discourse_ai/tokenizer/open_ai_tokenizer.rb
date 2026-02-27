@@ -54,25 +54,29 @@ module DiscourseAi
         def truncate(text, max_length, strict: false)
           return "" if max_length <= 0
 
+          text = normalize_text(text)
+
           # fast track common case, /2 to handle unicode chars
           # than can take more than 1 token per char
           return text if !strict && text.size < max_length / 2
 
           # Take tokens up to max_length, decode, then ensure we don't exceed limit
           truncated_tokens = tokenize(text).take(max_length)
-          truncated_text = decode(truncated_tokens)
+          truncated_text = normalize_text(decode(truncated_tokens))
 
           # If re-encoding exceeds the limit, we need to further truncate
           while tokenize(truncated_text).length > max_length
             truncated_tokens = truncated_tokens[0...-1]
-            truncated_text = decode(truncated_tokens)
+            truncated_text = normalize_text(decode(truncated_tokens))
             break if truncated_tokens.empty?
           end
 
-          truncated_text
+          normalize_text(truncated_text)
         end
 
         def below_limit?(text, limit, strict: false)
+          text = normalize_text(text)
+
           # fast track common case, /2 to handle unicode chars
           # than can take more than 1 token per char
           return true if !strict && text.size < limit / 2
@@ -83,6 +87,8 @@ module DiscourseAi
         private
 
         def safe_encode(text)
+          text = normalize_text(text)
+
           if !text.is_a?(String) || text.size <= SAFE_CHUNK_SIZE
             return tokenizer.encode(text)
           end

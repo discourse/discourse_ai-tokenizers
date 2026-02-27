@@ -103,6 +103,120 @@ RSpec.describe DiscourseAi::Tokenizers do
         expect(result).to be_a(String)
         expect(result.valid_encoding?).to be true
       end
+
+      it "handles ASCII-8BIT text in truncate" do
+        utf8_text = "日本語テスト 🎉 中文测试 العربية"
+        text = utf8_text.dup.force_encoding(
+          Encoding::ASCII_8BIT
+        )
+
+        limit = 5
+        utf8_result = tokenizer_class.truncate(utf8_text, limit, strict: true)
+        result = tokenizer_class.truncate(text, limit, strict: true)
+
+        expect(result).to be_a(String)
+        expect(result).to eq(utf8_result)
+        expect(result.encoding).to eq(Encoding::UTF_8)
+        expect(result.valid_encoding?).to be true
+        expect(tokenizer_class.size(result)).to be <= limit
+      end
+
+      it "handles ASCII-8BIT text in below_limit?" do
+        utf8_text = "日本語テスト 🎉 中文测试 العربية"
+        text = utf8_text.dup.force_encoding(
+          Encoding::ASCII_8BIT
+        )
+        token_count = tokenizer_class.size(utf8_text)
+        limits = [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+
+        limits.each do |limit|
+          expect(tokenizer_class.below_limit?(text, limit, strict: true)).to eq(
+            tokenizer_class.below_limit?(utf8_text, limit, strict: true)
+          )
+          expect(tokenizer_class.below_limit?(text, limit, strict: false)).to eq(
+            tokenizer_class.below_limit?(utf8_text, limit, strict: false)
+          )
+        end
+      end
+
+      it "always returns valid UTF-8 from chained truncation" do
+        invalid_utf8 = "日本語テスト".bytes[0..-2].pack("C*").force_encoding(
+          Encoding::UTF_8
+        )
+        expect(invalid_utf8.valid_encoding?).to be false
+
+        first = tokenizer_class.truncate(invalid_utf8, 5, strict: true)
+        second = tokenizer_class.truncate(first, 3, strict: true)
+
+        [first, second].each do |result|
+          expect(result).to be_a(String)
+          expect(result.encoding).to eq(Encoding::UTF_8)
+          expect(result.valid_encoding?).to be true
+        end
+
+        expect(tokenizer_class.size(first)).to be <= 5
+        expect(tokenizer_class.size(second)).to be <= 3
+      end
+    end
+
+    describe "pathological encoding handling" do
+      let(:valid_utf8_text) { "Cafe 日本語 🎉" }
+      let(:binary_utf8_text) do
+        valid_utf8_text.dup.force_encoding(Encoding::ASCII_8BIT)
+      end
+      let(:invalid_utf8) { "abc\xE2\x82".b.force_encoding(Encoding::UTF_8) }
+      let(:invalid_binary_text) { "bad\xFF\xFEtext\xC3".b }
+      let(:latin1_text) { "caf\xe9".dup.force_encoding(Encoding::ISO_8859_1) }
+      let(:normalized_cases) do
+        [
+          [binary_utf8_text, valid_utf8_text],
+          [invalid_utf8, invalid_utf8.scrub],
+          [
+            invalid_binary_text,
+            invalid_binary_text.dup.force_encoding(Encoding::UTF_8).scrub
+          ],
+          [latin1_text, "café"]
+        ]
+      end
+
+      it "normalizes tokenize, size, and encode inputs" do
+        normalized_cases.each do |input, normalized|
+          expect(tokenizer_class.tokenize(input)).to eq(
+            tokenizer_class.tokenize(normalized)
+          )
+          expect(tokenizer_class.size(input)).to eq(tokenizer_class.size(normalized))
+          expect(tokenizer_class.encode(input)).to eq(
+            tokenizer_class.encode(normalized)
+          )
+        end
+      end
+
+      it "normalizes truncate and below_limit? inputs" do
+        normalized_cases.each do |input, normalized|
+          token_count = tokenizer_class.size(normalized)
+          limits = [1, [token_count - 1, 1].max, token_count, token_count + 1].uniq
+
+          strict_truncation = tokenizer_class.truncate(
+            input,
+            [token_count, 1].max,
+            strict: true
+          )
+          expect(strict_truncation.encoding).to eq(Encoding::UTF_8)
+          expect(strict_truncation.valid_encoding?).to be true
+          expect(strict_truncation).to eq(
+            tokenizer_class.truncate(normalized, [token_count, 1].max, strict: true)
+          )
+
+          limits.each do |limit|
+            expect(tokenizer_class.below_limit?(input, limit, strict: true)).to eq(
+              tokenizer_class.below_limit?(normalized, limit, strict: true)
+            )
+            expect(tokenizer_class.below_limit?(input, limit, strict: false)).to eq(
+              tokenizer_class.below_limit?(normalized, limit, strict: false)
+            )
+          end
+        end
+      end
     end
 
     describe "edge case parameters" do

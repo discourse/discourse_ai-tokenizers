@@ -13,6 +13,7 @@ RSpec.describe DiscourseAi::Tokenizer::BasicTokenizer do
     it "includes expected tokenizer classes" do
       tokenizers = described_class.available_llm_tokenizers
       expect(tokenizers).to include(DiscourseAi::Tokenizer::AnthropicTokenizer)
+      expect(tokenizers).to include(DiscourseAi::Tokenizer::DeepSeekTokenizer)
       expect(tokenizers).to include(DiscourseAi::Tokenizer::GeminiTokenizer)
       expect(tokenizers).to include(DiscourseAi::Tokenizer::Llama3Tokenizer)
       expect(tokenizers).to include(DiscourseAi::Tokenizer::OpenAiTokenizer)

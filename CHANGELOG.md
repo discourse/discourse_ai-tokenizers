@@ -1,3 +1,7 @@
+## [1.0.0] - 2026-08-03
+
+- Add a tokenizer for DeepSeek-V4-Flash-0731
+
 ## [0.4.2] - 2026-02-27
 
 - Normalize `ASCII-8BIT`/non-UTF-8 string inputs before tokenization to prevent `EncodingError` in `truncate`, `encode`, and `below_limit?`

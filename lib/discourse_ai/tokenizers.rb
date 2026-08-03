@@ -17,6 +17,7 @@ require_relative "tokenizer/llama3_tokenizer"
 require_relative "tokenizer/gemini_tokenizer"
 require_relative "tokenizer/qwen_tokenizer"
 require_relative "tokenizer/mistral_tokenizer"
+require_relative "tokenizer/deep_seek_tokenizer"
 
 module DiscourseAi
   module Tokenizers

@@ -297,6 +297,11 @@ RSpec.describe DiscourseAi::Tokenizers do
                      DiscourseAi::Tokenizer::AnthropicTokenizer
   end
 
+  describe DiscourseAi::Tokenizer::DeepSeekTokenizer do
+    include_examples "tokenizer error handling",
+                     DiscourseAi::Tokenizer::DeepSeekTokenizer
+  end
+
   describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "tokenizer error handling",
                      DiscourseAi::Tokenizer::OpenAiTokenizer

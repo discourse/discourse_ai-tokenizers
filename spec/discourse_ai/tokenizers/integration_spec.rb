@@ -123,6 +123,11 @@ RSpec.describe DiscourseAi::Tokenizer do
                      DiscourseAi::Tokenizer::AnthropicTokenizer
   end
 
+  describe DiscourseAi::Tokenizer::DeepSeekTokenizer do
+    include_examples "integration tests",
+                     DiscourseAi::Tokenizer::DeepSeekTokenizer
+  end
+
   describe DiscourseAi::Tokenizer::OpenAiTokenizer do
     include_examples "integration tests",
                      DiscourseAi::Tokenizer::OpenAiTokenizer
@@ -177,6 +182,7 @@ RSpec.describe DiscourseAi::Tokenizer do
         DiscourseAi::Tokenizer::BasicTokenizer.available_llm_tokenizers
 
       expect(available).to include(DiscourseAi::Tokenizer::AnthropicTokenizer)
+      expect(available).to include(DiscourseAi::Tokenizer::DeepSeekTokenizer)
       expect(available).to include(DiscourseAi::Tokenizer::GeminiTokenizer)
       expect(available).to include(DiscourseAi::Tokenizer::Llama3Tokenizer)
       expect(available).to include(DiscourseAi::Tokenizer::OpenAiTokenizer)

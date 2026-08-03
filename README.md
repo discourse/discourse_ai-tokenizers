@@ -6,7 +6,7 @@ A Ruby gem providing unified access to various AI model tokenizers, including bo
 
 - **Unified Interface**: Consistent API across all tokenizers
 - **Multiple Model Support**: Supports tokenizers for various AI models
-- **LLM Tokenizers**: Anthropic, OpenAI, Gemini, Llama3, Qwen, Mistral
+- **LLM Tokenizers**: Anthropic, DeepSeek, OpenAI, Gemini, Llama3, Qwen, Mistral
 - **Embedding Tokenizers**: BERT, AllMpnetBaseV2, BgeLargeEn, BgeM3, MultilingualE5Large
 - **Common Operations**: tokenize, encode, decode, size calculation, truncation
 - **Unicode Support**: Proper handling of emoji and multibyte characters
@@ -68,6 +68,7 @@ DiscourseAi::Tokenizer::OpenAiTokenizer.below_limit?("Short text", 10)
 #### LLM Tokenizers
 
 - `DiscourseAi::Tokenizer::AnthropicTokenizer` - Claude models
+- `DiscourseAi::Tokenizer::DeepSeekTokenizer` - DeepSeek-V4-Flash-0731
 - `DiscourseAi::Tokenizer::OpenAiTokenizer` - GPT models
 - `DiscourseAi::Tokenizer::GeminiTokenizer` - Google Gemini
 - `DiscourseAi::Tokenizer::Llama3Tokenizer` - Meta Llama 3
